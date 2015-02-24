@@ -51,9 +51,7 @@ unsigned long facilityCode=0;        // decoded facility code
 unsigned long cardCode=0;            // decoded card code
 
 // interrupt that happens when INTO goes low (0 bit)
-void ISR_INT0()
-{
-  //Serial.print("0");
+void ISR_INT0() {
   bitCount++;
   flagDone = 0;
   weigand_counter = WEIGAND_WAIT_TIME;  
@@ -61,8 +59,7 @@ void ISR_INT0()
 }
 
 // interrupt that happens when INT1 goes low (1 bit)
-void ISR_INT1()
-{
+void ISR_INT1() {
   //Serial.print("1");
   databits[bitCount] = 1;
   bitCount++;
@@ -70,8 +67,7 @@ void ISR_INT1()
   weigand_counter = WEIGAND_WAIT_TIME;  
 }
 
-void setup()
-{
+void setup() {
    // Set up h-bridge outputs
   pinMode(forwardPin, OUTPUT);
   pinMode(backwardPin, OUTPUT);
@@ -92,8 +88,7 @@ void setup()
   weigand_counter = WEIGAND_WAIT_TIME;
 }
 
-void loop()
-{
+void loop() {
   // This waits to make sure that there have been no more data pulses before processing data
   if (!flagDone) {
     if (--weigand_counter == 0)
@@ -164,8 +159,7 @@ void loop()
   }
 }
 
-void printBits()
-{
+void printBits() {
       Serial.print("FC = ");
       Serial.print(facilityCode);
       Serial.print(", CC = ");
