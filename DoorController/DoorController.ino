@@ -50,6 +50,8 @@ unsigned int weigand_counter;        // countdown until we assume there are no m
 unsigned long facilityCode=0;        // decoded facility code
 unsigned long cardCode=0;            // decoded card code
 
+int cardidlength;
+                
 // interrupt that happens when INTO goes low (0 bit)
 void ISR_INT0() {
   bitCount++;
@@ -84,6 +86,7 @@ void setup() {
   attachInterrupt(0, ISR_INT0, FALLING);  
   attachInterrupt(1, ISR_INT1, FALLING);
   
+  cardidlength = sizeof(cardid)/sizeof(int);
 
   weigand_counter = WEIGAND_WAIT_TIME;
 }
@@ -123,6 +126,18 @@ void loop() {
       }
       
       printBits();
+      int cardCodeInt = (int)cardCode;
+      for (i=0; i<cardidlength; i++)
+      {
+        if(cardCodeInt == cardid[i])
+        {
+          Serial.println("Match!");
+          setForwards();
+          delay(5000);
+          setBackwards();
+          Serial.println("Door done opening!");
+        }
+      }
     }
     else if (bitCount == 26)
     {
@@ -165,5 +180,6 @@ void printBits() {
       Serial.print(", CC = ");
       Serial.println(cardCode); 
 }
+
 
 
